@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <h1 class="mt-4 mb-4 text-center">Top Tracks</h1>
+
+        <form action="track" method="GET">
+            <div class="row">
+                <div class="col-md-10 pr-md-0">
+                    {{form}}
+                </div>
+                <div class="col-md-2 pl-3 pr-3 mt-md-0 mt-2">
+                <button class="btn btn-primary btn-block" type="submit">Get</button>
+            </div></div>
+        </form>
+
+    <table class="table table-hover mt-4">
+        <tbody>
+            {% for track,liked in tracks %}
+            <tr>
+                <th scope="row" class="align-middle">{{forloop.counter}}</th>
+                <td><img src="{{track.album.images.2.url}}" width="40px" alt="img"></td>
+                <td class="align-middle">
+                    <a href="{{track.external_urls.spotify}}" target="_blank" class="text-dark" style="font-weight: 600">{{track.name}}</a>
+                </td>
+                <td class="align-middle">
+                    {% for artist in  track.artists %}
+                    <a href="{{artist.external_urls.spotify}}" target="_blank" class="text-dark" style="font-weight: 600;">{{artist.name}}</a>
+                    {% if not forloop.last %} 
+                    <span style="font-weight: 600">,</span>
+                    {% endif %}
+                    {% endfor %}
+                </td>
+                <td class="align-middle"><i class="{% if liked %}fas fa-heart {% else %}far fa-heart{% endif %}"></i></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

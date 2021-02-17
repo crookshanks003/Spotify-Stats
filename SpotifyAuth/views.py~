@@ -1,0 +1,49 @@
+from Spotify.settings import CLIENT_SECRET, REDIRECT_URI,CLIENT_ID
+from django.shortcuts import render,redirect
+from django.conf import settings
+from django.http import HttpResponse
+from .authorization import SpotifyAPI
+import json
+
+
+
+client_id = CLIENT_ID
+client_secret = CLIENT_SECRET
+redirect_uri = REDIRECT_URI 
+spotify = SpotifyAPI(client_id,client_secret,redirect_uri)
+
+def log_in(request):
+    if not request.session.exists(request.COOKIES.get('sessionid')):
+        request.session.create()
+        url = spotify.get_access_url()
+        return render(request, 'login.html', {'site': url})
+    elif not request.session.get('access_token'):
+        url = spotify.get_access_url()
+        return render(request, 'login.html', {'site': url})
+    else:
+        return redirect('home')
+
+
+
+def callback(request):
+    code = request.GET.get('code')
+    error = request.GET.get('error')
+    if error: return redirect('login')
+    data = spotify.get_access_data(code)
+    request.session['access_token'] = data.get('access_token')
+    request.session['refresh_token'] = data.get('refresh_token')
+    request.session['expires_in'] =  data.get('expires_in')
+    return redirect('home')
+
+def home(request):
+    user = spotify.get_user(request.session.get('access_token'))
+    if user.get('error'):
+        return redirect('login')
+    name = user.get('display_name')
+    return render(request, 'home.html', {'name':name})
+    # return HttpResponse(request.GET.get('code'))
+# Create your views here.
+
+def log_out(request):
+    request.session.delete()
+    return redirect('login')

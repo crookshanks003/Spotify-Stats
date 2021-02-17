@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+    {% block content %}
+
+    <div class="container">
+        <h1 class="mt-5 text-center" style="font-weight: 600;">Welcome {{user.display_name}}</h1>
+        <div class="text-center mt-4 mb-4">
+            {% if user.images.0.url %}
+            <img class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit:cover;" src=" {{user.images.0.url}} ">
+            {% else %} 
+            <i class="fas fa-user-circle fa-10x" width=></i>
+            {% endif %}</div>
+        <p class="lead text-center mb-4" style="font-weight: 400; color: #5c5c5c;">id: {{user.id}}</p>
+        <div class="text-center mb-5">
+        <a class="btn btn-primary" href="{{user.external_urls.spotify}}" target="_blank">Visit Profile on Spotify</a></div>
+        <div class="border-top">
+        <h2 class="text-center mt-4">Your Top Artists</h2>
+        <div class="row mt-4">
+            {% for artist in artists%}
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="text-center">
+                    <img class="img-fluid" src="{{artist.images.1.url}}" alt="Card image cap">
+                </div>
+                    <div class="text-center mt-md-1" style="font-weight: 600;">
+                        <a href="{{artist.external_urls.spotify}}" class="text-dark" target="_blank">
+                            {{artist.name}}
+                        </a>
+                    </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mb-4">
+        <a class="btn btn-primary" href="{% url 'artist' %}?time_range=short_term">View Top Artists</a></div>
+    </div>
+    <div class="border-top">
+        <h2 class="text-center mt-4">Your Top Tracks</h2>
+        <div class="row mt-4">
+            {% for track in tracks%}
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="text-center">
+                    <img class="img-fluid" src="{{track.album.images.1.url}}" alt="Card image cap">
+                </div>
+                    <div class="text-center mt-md-1" style="font-weight: 600;">
+                        <p class="mb-0"><a href="{{track.external_urls.spotify}}" class="text-dark" target="_blank">
+                            {{track.name}}
+                        </a></p>
+                        <footer class="blockquote-footer text-black pr-3"><a href="{{track.artists.0.external_urls.spotify}}" target="_blank">
+                            {{track.artists.0.name}}
+                        </a></footer>
+                    </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mb-4">
+            <a class="btn btn-primary" href="{% url 'track' %}?time_range=short_term">View Top Tracks</a></div>
+        </div>
+    </div>
+</div>
+    {% endblock %}

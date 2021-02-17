@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+    {% block content %}
+    <div class="container">
+        <h1 class="mt-4 mb-4 text-center">Top Artists</h1>
+        <form action="artist" method="GET">
+            <div class="row">
+                <div class="col-md-10 pr-md-0">
+                    {{form}}
+                </div>
+                <div class="col-md-2 pl-3 pr-3 mt-md-0 mt-2">
+                <button class="btn btn-primary btn-block" type="submit">Get</button>
+            </div></div>
+        </form>
+        <div class="row mt-5">
+            {% for artist in artists%}
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="text-center">
+                    <img class="img-fluid" src="{{artist.images.1.url}}" alt="Card image cap">
+                </div>
+                    <div class="text-center mt-md-1" style="font-weight: 600;">
+                        <span class="text-dark">{{forloop.counter}}.</span>
+                        <a href="{{artist.external_urls.spotify}}" class="text-dark" target="_blank">
+                            {{artist.name}}
+                        </a>
+                    </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endblock %}
