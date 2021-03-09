@@ -1,4 +1,4 @@
-from Spotify.settings import CLIENT_SECRET, DATABASES, REDIRECT_URI,CLIENT_ID
+from Spotify.settings import CLIENT_SECRET,REDIRECT_URI,CLIENT_ID
 from django.shortcuts import render,redirect
 from django.conf import settings
 from django.http import HttpResponse
